@@ -124,7 +124,13 @@ end
 
 function love.keypressed(key)
     if key == "space" then
-        spawnZombie()
+        if gameState == 2 then
+            spawnBullet()
+        elseif gameState == 1 then
+            gameState = 2
+            machineGunSpawned = false
+            player.hp = 10
+        end
     end
 end
 
@@ -137,6 +143,7 @@ function love.mousepressed(x, y, button)
         player.hp = 10
     end
 end
+
 
 function handlePlayerMovement(dt)
     if (love.keyboard.isDown("d") or love.keyboard.isDown("right")) and player.x < love.graphics.getWidth() then

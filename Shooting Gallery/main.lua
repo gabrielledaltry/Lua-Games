@@ -12,11 +12,14 @@ function love.load()
 
     sprites = {}
     sprites.sky = love.graphics.newImage('sprites/sky.png')
-    sprites.target = love.graphics.newImage('sprites/target.png')
+    sprites.target = love.graphics.newImage('sprites/pumpkin.png')
     sprites.crosshairs = love.graphics.newImage('sprites/crosshairs.png')
+    sprites.explosion = love.graphics.newImage('sprites/explosion.png')
 
     mouseX = 0
     mouseY = 0
+
+    renderExplosion = false
 end
 
 function love.update(dt)
@@ -31,8 +34,9 @@ function love.update(dt)
     end
 end
 
-function love.draw()
+function love.draw(dt)
     love.graphics.draw(sprites.sky, 0, 0)
+    timer = 0
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(gameFont)
@@ -46,8 +50,12 @@ function love.draw()
 
     if gameState == 2 then
         love.graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
+        if renderExplosion == true then
+            love.graphics.draw(sprites.explosion, explosionx - target.radius, explosiony - target.radius)
+        end
         love.graphics.draw(sprites.crosshairs, mouseX - 20, mouseY - 20)
     end
+
 
     love.mouse.setVisible(false)
 
@@ -75,6 +83,9 @@ function love.mousepressed(x, y, button, istouch, presses)
                 score = score + 2
                 timer = timer - 1
             end
+            renderExplosion = true
+            explosionx = target.x
+            explosiony = target.y
 
             moveTarget()
         else
